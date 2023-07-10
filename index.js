@@ -1,4 +1,46 @@
-const http = require("http");
+import express from 'express';
+
+const app = express();
+app.set('port', process.env.PORT || 3000);
+app.use(express.static('./public'));// set location for static files
+app.set('view engine', 'ejs');
+
+app.get('/', (req, res) =>{
+    console.log(req.url)
+    res.send('Hello everyone, it is IT 122');
+});
+
+app.get('/about', (req,res) => {
+    console.log(req.url)
+    res.send('This is the about page')
+})
+
+// define 404 handler
+app.use((req,res) => {
+    res.status(404);
+    res.send('404 - Not found');
+});
+
+app.listen(app.get('port'), () => {
+    console.log('express started'); 
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*const http = require("http");
 const fs = require("fs");
 http.createServer((req,res) => {
     let path = req.url.toLowerCase();
@@ -19,4 +61,4 @@ http.createServer((req,res) => {
             res.end('Not found');
             break;
     }
-}).listen(process.env.PORT || 3000);
+}).listen(process.env.PORT || 3000);*/
