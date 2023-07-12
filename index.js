@@ -1,3 +1,6 @@
+
+import * as car from './data.js';
+
 import express from 'express';
 
 const app = express();
@@ -7,13 +10,28 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) =>{
     console.log(req.url)
-    res.send('Hello everyone, it is IT 122');
+    res.render('home', {cars: car.getAll()});
+})
+
+app.get('/detail', (req,res) => {
+    console.log(req.query)
+    let result = car.getItem(req.query.model);
+    res.render('detail', {model: req.query.model, result});
 });
+
+app.post('/detail', (req,res) => {
+    console.log(req.body)
+    let found = car.getItem(req.body.model);
+    res.render('detail', {model: req.body.model, result: found, cars: car.getAll()});
+});
+
 
 app.get('/about', (req,res) => {
     console.log(req.url)
     res.send('This is the about page')
 })
+
+
 
 // define 404 handler
 app.use((req,res) => {
