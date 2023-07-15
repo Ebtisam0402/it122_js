@@ -16,13 +16,16 @@ function getAll() {
   return cars;
 }
 
+const getItem = (model) => {
+  return cars.find((item) => {
+      return item.model === model;
+  });
+};
 
-function  getItem () {
-  return cars.find(cars => cars.model === model)  
-}
-  
-
-
-
-
+console.log(cars);
 export { getAll, getItem };
+
+
+
+
+
