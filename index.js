@@ -13,24 +13,17 @@ app.get('/', (req, res) =>{
     res.render('home', {cars: car.getAll()});
 })
 
-app.get('/detail', (req,res) => {
-    console.log(req.query)
-    let result = car.getItem(req.query.model);
-    res.render('detail', {model: req.query.model, result});
-});
-
-app.post('/detail', (req,res) => {
-    console.log(req.body)
-    let found = car.getItem(req.body.model);
-    res.render('detail', {model: req.body.model, result: found, cars: car.getAll()});
-});
-
-
 app.get('/about', (req,res) => {
     console.log(req.url)
     res.send('This is the about page')
 })
 
+
+app.get('/detail', (req,res) => {
+    console.log(req.query)
+    let result = car.getItem(req.query.model);
+    res.render('detail', {model: req.query.model, result: result});
+});
 
 
 // define 404 handler
