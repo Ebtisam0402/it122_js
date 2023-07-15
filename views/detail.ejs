@@ -2,11 +2,13 @@
 <html>
     <body>
         <a href="/">Home</a>
-        <% if (model) { %>
-            <h2>Car Model: <%= model %></h2>
-          <% } else { %>
-            <h2>Please enter a model</h2>
-          <% } %>
-
+        <% if (result) { %>
+          <h2><%= model %> Details</h2>
+          <li>Make: <%= result.make %></li>
+          <li>Year: <%= result.year %></li>
+      <% } else { %>
+              <h2><%= model %> not found</h2>
+      <% } %>
+      
     </body>
 </html>
