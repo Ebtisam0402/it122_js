@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1> Home Page </h1>
+
+        <h2> Cars </h2>
+        <% cars.forEach(function(car) { %>
+            <li><a href="detail?model=<%= car.model %>"><%= car.model %></a></li>
+          <% }); %>
+    
+    
+    </body>
+</html>
