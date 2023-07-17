@@ -6,6 +6,7 @@ import express from 'express';
 const app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(express.static('./public'));// set location for static files
+app.use(express.urlencoded({ extended: true }))
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) =>{
@@ -37,7 +38,14 @@ app.listen(app.get('port'), () => {
   });
 
 
+/*
+http://127.0.0.1:3000/detail?model=Toyota
 
+
+<a href="http://google.com">google</a>
+ <li><a href="detail?model=<%= car.model %>"><%= car.model %></a></li>
+
+*/                        
 
 
 
