@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
+    <head>
+
+        <title>
+        
+            Home Page
+        </title>
+        <link rel="stylesheet" href="./css/main.css">
+    </head>
     <body>
         <h1> Home Page </h1>
 
         <h2> Cars </h2>
         <% cars.forEach(function(car) { %>
-            <li> <%= car.model %> </li>
+            
+            <li><a href="detail?model=<%= car.model %>"><%= car.model %></a></li>
           <% }); %>
     
     
