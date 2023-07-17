@@ -22,7 +22,7 @@ const getItem = (model) => {
   });
 };
 
-console.log(cars);
+//console.log(cars);
 export { getAll, getItem };
 
 
