@@ -1,20 +1,9 @@
 <!DOCTYPE html>
 <html>
-  <head>
-
-    
-      <% if (result) { %>
-        <title><%= model %> Details </title>
-        
-    <% } else { %>
-            <title><%= model %> not found</title>
-    <% } %> 
-   
-</head>
-    <body>
+     <body>
         <a href="/">Home</a>
         <% if (result) { %>
-          <h2><%= model %> Details</h2>
+          <h2><%= result.model %> Details</h2>
           <li>Make: <%= result.make %></li>
           <li>Year: <%= result.year %></li>
       <% } else { %>
