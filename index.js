@@ -45,6 +45,13 @@ http://127.0.0.1:3000/detail?model=Toyota
 <a href="http://google.com">google</a>
  <li><a href="detail?model=<%= car.model %>"><%= car.model %></a></li>
 
+   <% if (result) { %>
+        <title><%= model %> Details </title>
+        
+    <% } else { %>
+            <title><%= model %> not found</title>
+    <% } %> 
+   
 */                        
 
 
