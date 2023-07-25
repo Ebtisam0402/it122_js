@@ -1,5 +1,6 @@
 
-import * as car from './data.js';
+//import * as car from './data.js';
+import { Car } from "./models/Car.js";
 
 import express from 'express';
 
@@ -9,26 +10,36 @@ app.use(express.static('./public'));// set location for static files
 app.use(express.urlencoded({ extended: true }))
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) =>{
-    console.log(req.url)
-    res.render('home', {cars: car.getAll()});
-})
 
 app.get('/about', (req,res) => {
     console.log(req.url)
     res.send('This is the about page')
 })
 
+app.get('/', (req, res, next) => {
+    console.log(req.query);
+    Car.find({}).lean()
+      .then((cars) => {
+        // respond to browser only after db query completes
+        res.render('home', { cars });
+      })
+      .catch(err => next(err))
+  });
 
-app.get('/detail', (req,res) => {
-    console.log(req.query)
-    let result = car.getItem(req.query.model);
-    res.render('detail', {model: req.query.model, result: result});
-});
+
+app.get('/detail', (req,res,next) => {
+    // db query can use request parameters
+    Car.findOne({ model:req.query.model }).lean()
+        .then((car) => {
+            res.render('detail', {result: car} );
+        })
+        .catch(err => next(err));
+  });
 
 
 // define 404 handler
 app.use((req,res) => {
+    res.type('text/plain'); 
     res.status(404);
     res.send('404 - Not found');
 });
