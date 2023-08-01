@@ -22,11 +22,10 @@ app.get('/', (req, res, next) => {
     console.log(req.query);
     Car.find({}).lean()
       .then((cars) => {
-        // respond to browser only after db query completes
-        res.render('home', { cars });
+      // pass items data array to home-page template 
+res.render('home', {items: JSON.stringify(cars)});
       })
-      .catch(err => next(err))
-  });
+});
 
 
 app.get('/detail', (req,res,next) => {
