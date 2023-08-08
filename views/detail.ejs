@@ -1,14 +1,57 @@
 <!DOCTYPE html>
 <html>
-     <body>
-        <a href="/">Home</a>
-        <% if (result) { %>
-          <h2><%= result.model %> Details</h2>
-          <li>Make: <%= result.make %></li>
-          <li>Year: <%= result.year %></li>
-      <% } else { %>
-        <h2><%= (result) %> not found</h2>
-      <% } %>
-      
-    </body>
+<head>
+    <title>React App Demo</title>
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+    <h2> Home Page </h2>
+<div id="root"></div>
+<script type="text/babel">
+    // create variable with unescaped JS data from server
+  let cars = <%- items %>;
+  console.log(cars)
+  
+     // define other components
+
+    const Detail = (props) => {
+      return (
+        <div>
+        <h3>Car Details</h3>
+        { props.item &&
+          <form>
+            <b>Model</b>: <input type="text" name="model" onChange={propse.changeHandler} value={props.item.model || ''} />
+            <b>Make</b>:  <input type="text" name="make" onChange={propse.changeHandler} value={props.item.make  || ''} />
+            <b>Year</b>:  <input type="text" name="year" onChange={propse.changeHandler} value={props.item.year || ''} />
+            </form>
+        }
+        </div>
+      )
+    }
+       // click handler event change
+  const itemChanged = (e) => {
+        let field = e.targe.name;
+        let newItem = {...selectedItem};
+        newItem[field] =e.target.value;
+        setSelectedItem(newItem);
+       } 
+
+    <h1> Home Page </h1>
+
+
+    ReactDOM.render(
+        <Detail item={selectedItem} changeHandler={itemChanged}/>, 
+        document.getElementById('root'));
+</script>
+</body>
 </html>
+
+
+
+
