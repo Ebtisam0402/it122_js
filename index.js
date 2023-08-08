@@ -46,7 +46,7 @@ app.post('/detail', (req,res, next) => {
 });
 
 // Delete
-app.delete('/detail', (req,res, next) => {
+app.get('/delete', (req,res, next) => {
     Car.findOneAndRemove({ model:req.query.model }).lean()
         .then((car) => {
             res.render('detail', {result: car} );
@@ -68,7 +68,7 @@ app.get('/api', (req, res, next) => {
 //Get single item
 app.get('/api/detail', (req,res,next) => {
     // db query can use request parameters
-    Car.findOne({ model:req.body.model })
+    Car.findOne({ model:req.query.model })
         .then((car) => {
             res.json(car);
         })
@@ -76,24 +76,18 @@ app.get('/api/detail', (req,res,next) => {
   });
 //Update
   app.post('/api/detail', (req,res, next) => {
-    const newCar = {'model':'Ford', 'make':'camry', 'year': 2020 }
-   Car.updateOne({'model':'Merceeds'}, newCar, {upsert:true}, (err, result) => {
-  if (err) return next(err);
-    console.log(result);
-  // other code here
- })
-  Car.findOneAndUpdate({ model:req.body.model }).lean()
-        .then((car) => {
-            res.json(car);
-        })
-        .catch(err => next(err));
+    Car.updateOne({ model: req.body.model}, req.body, {upsert: true}).lean()
+    .then((result) => {
+        res.json(result)
+    })
+    .catch(err = next(err))
 });
-
+ 
 
 //Delete
-app.delete('/api/detail', (req,res, next) => {
+app.get('/api/delete', (req,res, next) => {
     
-    Car.findOneAndRemove({ model:req.body.model })
+    Car.findOneAndRemove({ model:req.query.model })
         .then((car) => {
             res.json(car);
         })
