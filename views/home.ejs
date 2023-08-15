@@ -3,8 +3,8 @@
 <head>
     <title>React App Demo</title>
 
-    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
     <!-- Don't use this in production: -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -23,7 +23,9 @@
         const listItems = props.cars.map(item =>  
         <li key={item._id} onClick={props.clickHandler}>{item.model}</li>
         );
-        return <ul>{listItems}</ul>
+        return (
+          <ul>{listItems}</ul>
+          )
        
     }
 
@@ -32,12 +34,13 @@
         <div>
         <h3>Car Details</h3>
         { props.item &&
+         <div> 
           <form>
-            <b>Model</b>: <input type="text" name="model" onChange={propse.changeHandler} value={props.item.model || ''} />
-            <b>Make</b>:  <input type="text" name="make" onChange={propse.changeHandler} value={props.item.make  || ''} />
-            <b>Year</b>:  <input type="text" name="year" onChange={propse.changeHandler} value={props.item.year || ''} />
-            <button onClick= {props.clearbutton}></button>
+            <b>Model</b>: <input type="text" name="model" onChange={props.changeHandler} value={props.item.model || ''} />
+            <b>Make</b>:  <input type="text" name="make" onChange={props.changeHandler} value={props.item.make  || ''} />
+            <b>Year</b>:  <input type="text" name="year" onChange={props.changeHandler} value={props.item.year || ''} />
             </form>
+            <button onClick= {props.clearbutton}></button></div>
         }
         </div>
       )
@@ -57,7 +60,7 @@
         setSelectedItems(found);
        } 
 
-          // click handler event change
+         // click handler event change
   const itemChanged = (e) => {
         let field = e.target.name;
         let newItem = {...selectedItem};
@@ -70,12 +73,12 @@
         console.log(e.target.innerText);
         setSelectedItems();
 
-       }
+      }
 
     
     return (
         <div> 
-            <h2>Home Page</h2>
+            
             <Cars cars={cars} clickHandler={itemClicked} />
             <Detail item={selectedItem} changeHandler={itemClicked} clearbutton={clearbutton} />
         </div>
@@ -85,7 +88,7 @@
 
 
    const container = document.getElementById('root');
-    const root = ReactDOM.createroot(container);
+    const root = ReactDOM.createRoot(container);
     root.render(<CarApp />);
 </script>
 </body>
