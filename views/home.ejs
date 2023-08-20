@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html>
 <head>
     <title>React App Demo</title>
@@ -21,11 +21,10 @@
   const Cars = (props) => {
         console.log(props)
         const listItems = props.cars.map(item =>  
-        <li key={item._id} onClick={props.clickHandler}>{item.model}</li>
+        <li key={item._id} id={item._id} onClick={props.clickHandler}>{item.model}</li>
         );
-        return (
-          <ul>{listItems}</ul>
-          )
+        return <ul>{listItems}</ul>
+          
        
     }
 
@@ -40,56 +39,131 @@
             <b>Make</b>:  <input type="text" name="make" onChange={props.changeHandler} value={props.item.make  || ''} />
             <b>Year</b>:  <input type="text" name="year" onChange={props.changeHandler} value={props.item.year || ''} />
             </form>
-            <button name="clear" onClick= {props.clearbutton}>Clear</button></div>
+            <button name="save" onClick= {props.saveItem}>Save</button>
+            <button name="clear" onClick= {props.clearbutton}>Clear</button>
+            <button name="delete" onClick= {props.deleteItem}>Delete</button>
+            </div>
         }
         </div>
       )
     }
   
-  //this is the parent component 
+   //this is the parent component 
    const CarApp = () => {
 
     const [items, setItems] = React.useState(cars);
-    const [selectedItem, setSelectedItems] = React.useState();
+    const [selectedItem, setSelectedItem] = React.useState();
+
+    //load data after component has rendered
+    React.useEffect(() => {
+        // fetch data
+      const fetchData = async()=> {
+      fetch('/api').then(res => res.json())
+     .then((json) => {
+         setItems(json)
+      })
+    }
+    fetchData()
+   }, []);
+
      // click handler event
-  const itemClicked = (e) => {
+   const itemClicked = (e) => {
       console.log('itemClicked')
         console.log(e.target.innerText);
         let found = cars.find((item) => {
             return item.model === e.target.innerText })
-        setSelectedItems(found);
+        setSelectedItem(found);
        } 
 
-         // click handler event change
-  const itemChanged = (e) => {
-        let field = e.target.name;
-        let newItem = {...selectedItem};
-        newItem[field] =e.target.value;
-        setSelectedItem(newItem);
-       } 
+      
 
        const clearbutton = (e) => {
       console.log('clearbutton')
         console.log(e.target.innerText);
-        setSelectedItems();
+        setSelectedItem();
 
       }
 
-    
-    return (
-        <div> 
-            
-            <Cars cars={cars} clickHandler={itemClicked} />
-            <Detail item={selectedItem} changeHandler={itemClicked} clearbutton={clearbutton} />
-        </div>
-    );
-}
+ 
   
+      const saveItem = () => {
+        console.log('saveItem')
+    if (!selectedItem.model) {
+        return;
+    }
+        fetch("/api/detail", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(selectedItem)
+        })
+        .then(res => res.json())
+        .then((cars) => {
+        //if item has no _id, it wasn't previously saved in DB
+              if (!selectedItem._id) {
+                selectedItem._id = cars._id;
+               setSelectedItem(selectedItem);
+               //update items list
+               let newItems = [...items]
+               newItems.push(selectedItem);
+               setItems(newItems);
 
+            }
+        })
+       
+    }
+
+
+const deleteItem = () => {
+    console.log('should delete')
+    //delete item from DB
+        fetch(`/api/delete/${selectedItem._id}`) 
+           .then(res => res.json())
+           .then((cars) => {
+            //remove item from list
+            const newItems = items.filter((item) => {
+                return item._id !== selectedItem._id
+            });
+            setItems(newItems);
+            //clear form
+            setSelectedItem({});
+        })
+     }
+
+
+  // click handler event change
+  const itemChanged = (e) => {
+    console.log("itemChanged")
+        let field = e.target.name;
+        let newItem = {...selectedItem};
+        newItem[field] =e.target.value;
+        setSelectedItem(newItem);
+        items.find((item, index) => {
+            if (item._id === newItem._id) {
+                items[index] = newItem;
+                setItems([...items]);
+            }
+          })
+       }
+
+      
+
+    
+      return (
+        <div> 
+         
+            <Cars cars={cars} clickHandler={itemClicked} />
+            <Detail item={selectedItem} changeHandler={itemChanged} clearbutton={clearbutton}
+            saveItem={saveItem} deleteItem={deleteItem} />
+        </div>
+        );
+  }
+      
+  
 
    const container = document.getElementById('root');
     const root = ReactDOM.createRoot(container);
     root.render(<CarApp />);
+
 </script>
 </body>
 </html>
