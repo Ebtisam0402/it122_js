@@ -85,9 +85,8 @@ app.get('/api/detail', (req,res,next) => {
  
 
 //Delete
-app.get('/api/delete', (req,res, next) => {
-    
-    Car.findOneAndRemove({ model:req.query.model })
+app.get('/api/delete/:id', (req,res, next) => {
+    Car.findOneAndRemove({ "_id":req.params.id })
         .then((car) => {
             res.json(car);
         })
@@ -96,9 +95,9 @@ app.get('/api/delete', (req,res, next) => {
 
 
 // define 404 handler
-app.use((req,res, next) => {
-    res.status(404);
-    res.send('404 - Not found');
+app.use((err,req,res, next) => {
+    console.log(err);
+    res.status(500).json({ message: 'Internal Server Error' });
 });
 
 app.listen(app.get('port'), () => {
